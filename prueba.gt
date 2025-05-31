@@ -10,6 +10,10 @@ let fibonacci = fn(x) {
   }
 };
 
-fibonacci(10);
+puts(fibonacci(10));
 
+let a = 5 + 7;
 
+puts(a);
+
+puts("Hola");

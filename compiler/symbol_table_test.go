@@ -1,3 +1,5 @@
+// The above code contains test functions for defining, resolving, and shadowing symbols in a symbol
+// table implementation.
 package compiler
 
 import "testing"

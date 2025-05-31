@@ -1,3 +1,5 @@
+// The above code defines a symbol table data structure with functions for defining and resolving
+// symbols within different scopes.
 package compiler
 
 type SymbolScope string

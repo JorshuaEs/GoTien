@@ -1,3 +1,4 @@
+// The code defines token types and a function for looking up identifiers in a programming language.
 package token
 
 type TokenType string

@@ -1,3 +1,5 @@
+// The above code defines a parser in Go for a custom programming language, implementing parsing
+// functions for various types of expressions and statements.
 package parser
 
 import (

@@ -1,3 +1,5 @@
+// The above code defines a lexer in Go that tokenizes input strings based on specific characters and
+// identifiers.
 package lexer
 
 import "gotien/token"

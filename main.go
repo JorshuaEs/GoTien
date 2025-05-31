@@ -54,6 +54,8 @@ import (
 	"gotien/vm"
 )
 
+// The main function reads a file, parses its content, compiles it into bytecode, runs it on a virtual
+// machine, and prints the result.
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Uso: gotien archivo.gotien")

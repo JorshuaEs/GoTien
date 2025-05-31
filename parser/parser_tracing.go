@@ -1,3 +1,4 @@
+// The code defines functions for tracing and printing messages with indentation in Go.
 package parser
 
 import (
