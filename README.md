@@ -1,4 +1,3 @@
-[⚠️ Suspicious Content] 
 # GOTIEN Compilador
 
 Este proyecto implementa un intérprete para un lenguaje de programación personalizado similar, escrito en Go. El sistema incluye todas las etapas del proceso de interpretación: lexing, parsing, compilación y evaluación.
