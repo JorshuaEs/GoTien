@@ -135,7 +135,7 @@ Source Code → Lexer → Tokens → Parser → AST (Abstract Syntax Tree) → C
 
 # Componentes del proyecto
 
-1. Análisis Léxico `(lexer.go)`\\
+1. Análisis Léxico `(lexer.go)`\
 Convertierte el código fuente en tokens.
 
 *   Identifica números, strings, identificadores y símbolos especiales.
@@ -143,7 +143,7 @@ Convertierte el código fuente en tokens.
 *   Ignora los espacios en blanco
 *   Soporta strings entre comillas
 
-2.  Árbol de Sintaxis Abstracta `(ast.go)`\\
+2.  Árbol de Sintaxis Abstracta `(ast.go)`\
 Define la estructura en forma de árbol, reflejando la estructura del programa por medio de nodos, cada nodo representando una costrucción del lenguaje.
 
 *   Estructura
