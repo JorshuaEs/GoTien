@@ -1,6 +1,3 @@
-// The `Start` function in the Go code is a REPL (Read-Eval-Print Loop) for a custom language called
-// GoTien, which reads input, parses it, compiles it into bytecode, executes the bytecode, and prints
-// the result.
 package repl
 
 import (

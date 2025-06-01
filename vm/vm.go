@@ -1,6 +1,3 @@
-// The provided code defines a virtual machine (VM) in Go for executing bytecode instructions of a
-// custom programming language, handling operations on integers, strings, arrays, hashes, closures, and
-// built-in functions.
 package vm
 
 import (

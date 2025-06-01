@@ -1,14 +1,12 @@
-// The above code defines a lexer in Go that tokenizes input strings based on specific characters and
-// identifiers.
 package lexer
 
 import "gotien/token"
 
 type Lexer struct {
 	input        string
-	position     int  // current position in input (points to current char)
-	readPosition int  // current reading position in input (after current char)
-	ch           byte // current char under examination
+	position     int
+	readPosition int
+	ch           byte
 }
 
 func New(input string) *Lexer {

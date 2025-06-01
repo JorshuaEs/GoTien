@@ -1,4 +1,3 @@
-// The code contains test functions for checking hash keys of String, Boolean, and Integer objects.
 package object
 
 import "testing"

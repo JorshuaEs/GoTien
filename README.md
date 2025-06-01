@@ -143,6 +143,24 @@ Convertierte el código fuente en tokens.
 *   Ignora los espacios en blanco
 *   Soporta strings entre comillas
 
+**Ejemplo**
+
+Se tiene el siguiente código:
+
+```javascript
+let x = 5;
+```
+
+El lexer devuelve lo siguiente: 
+
+```go
+{Type: "LET", Literal: "let"}
+{Type: "IDENT", Literal: "x"}
+{Type: "ASSIGN", Literal: "="}
+{Type: "INT", Literal: "5"}
+{Type: "SEMICOLON", Literal: ";"}
+```
+
 2.  Árbol de Sintaxis Abstracta `(ast.go)`\
 Define la estructura en forma de árbol, reflejando la estructura del programa por medio de nodos, cada nodo representando una costrucción del lenguaje.
 
@@ -166,8 +184,8 @@ se convierte en:
 	Value: &IntegerLiteral{Value: 5},
 }
 ```
-3. Sistema de Instrucciones Bytecode `(code.go)`
-Formato intermedio de Instrucciones que representa las operaciones de un lenguaje de porgramacion. Las instrucciones se cofican como lenguaje intermedio, este paquete ayuda a definir, crear, leer y formatear las instrucciones. 
+3. Sistema de Instrucciones Bytecode `(code.go)`\
+Formato intermedio de Instrucciones que representa las operaciones de un lenguaje de porgramacion. Las instrucciones se codifican como bytecode, este paquete ayuda a definir, crear, leer y formatear las instrucciones. 
 
 Este conmponente contiene:
 *   Definiciones de los opcode (códigos de operación).
@@ -186,13 +204,13 @@ ins := Make(OpConstant, 65534)
 fmt.Println(Instructions(ins).String())
 
 ```
-Se traduce la instrucción a código intermedio como:
+Se traduce la instrucción a bytecode como:
 
 ```yaml
 0000 OpConstant 65534
 ```
-4. Compilador `(compiler.go)`
-Transforma el AST en código intermedio, el cual puede ser ejecutado por la vm. Recorre y visita todos los nodos del árbol, emite instrucciones en código intermedio según el tipo de nodo (como literales, operadores, condicionales, funciones, etc.).
+4. Compilador `(compiler.go)`\
+Transforma el AST en bytecode, el cual puede ser ejecutado por la vm. Recorre y visita todos los nodos del árbol, emite instrucciones en bytecode según el tipo de nodo (como literales, operadores, condicionales, funciones, etc.).
 
 **Pasos del compilador**
 
@@ -217,3 +235,183 @@ opConstant 2
 OpAdd
 OpSetGlobal 0 //x
 ```
+5. Tabla de símbolos\
+Encargado de gestionar y resolver nombres de variables y funcones segun su alcance durante la compilación.
+Implementa una tabla de símbolos con somporte para múltiples scopes, trabajando estrechamente con el compilador para rastrear qué significa cada nombre que aparece en el código fuente, y en que contexto se debe interpretar.
+
+**Ejemplo**
+
+Se tiene el siguiente código  para compilar: 
+```javascript
+let a = 5;
+
+fn outer() {
+  let b = 10;
+
+  fn inner() {
+    return a + b;
+  }
+
+  return inner();
+}
+```
+Resultado final de la tabla de simbolo
+
+```sql
+Global scope:
+  - a: GlobalScope, Index 0
+  - outer: GlobalScope, Index 1
+
+outer scope:
+  - b: LocalScope, Index 0
+  - inner: LocalScope, Index 1
+
+inner scope:
+  - b: FreeScope, Index 0
+  - a: GlobalScope (resuelto desde global)
+```
+6.  Funciones Integradas (builtins.go)/
+Definición de un conjunto de funciones integradas, similares a las funciones estándar qye ofrecen lenguajes como Python o JavaScript.
+
+Funciones disponibles automáticamente desntro del lenguaje, sin necesida de que el usuario las defina. Funciones integradas definidas: 
+* len → Devuelve la longitud de una cadena o array.
+* puts → Imprime en consola los argumentos.
+* first → Devuelve el primer elemento de un array.
+* last → Devuele el último elemento de un array.
+* rest → Devuelce un nuevo array con todos los elementos excepto el primero.
+* push → Devuelve un nuevo array con el segundo argumento añadido  al final del primero.
+
+7. Entorno `(Environment.go)`\
+
+Es donde se guardan y consultan variables durante la ejecución  del programa. Es un tipo de estructura de datos que actúa como un diccionario, donde se almacenan pares nombre → valor.
+
+**Ejemplo**
+
+```go
+x = 5
+y = "hola"
+```
+8. Tipos de Objectos `(object.go)`\
+
+Define todos los tiepos de objetos que pueden existir en el lenguaje. Representa los valores del lenguaje tal como los vería el compilador en tiempo de ejecución. Entre los mas importantes se encuentran; `Interger`,`Boolean`, `String`.
+
+9. Analizador léxico `(parser.go)`\
+
+Tiene como propósito  transformar una secuencia de tokesn (producida por el lexer) en una estructura de árbol (AST) que representa el programa en sí. Toma como entrada una lista de tokens que viene del lexer y construye un AST, que modela el programa como una estructura jerárquica  que el compilador puede ejecutar.
+
+**Ejemplo**
+
+se tiene lo siguiente: `let x = 5 + 2`;
+
+* Tokens obtenidos del lexer:
+
+```javascript
+LET IDENT ASSIGN INT PLUS INT SEMICOLON
+```
+
+* El AST que genera el parser:
+
+```javascript 
+&ast.Program{
+  Statements: []ast.Statement{
+    &ast.LetStatement{
+      Name: "x",
+      Value: &ast.InfixExpression{
+        Left:  &ast.IntegerLiteral{Value: 5},
+        Op:    "+",
+        Right: &ast.IntegerLiteral{Value: 2},
+      },
+    },
+  },
+}
+```
+
+10. Tokens `(tokens.go)`\
+
+Define el sistema de tokens utilizados. Los tokes son las unidades léxicas que el lexer detecta al leer el código fuente. Es una tabla de referencia que otros compoentes usan para entender el código fuente. Se agrupan en las siguientes categorias:
+* Tokens especiales
+```go 
+ILLEGAL = "ILLEGAL" // carácter no reconocido
+EOF     = "EOF"     // fin de archivo
+```
+* Identificadores y literales
+```go
+IDENT, INT, STRING
+```
+* operadores
+```go 
+=, +, -, !, *, /, <, >, ==, !=
+```
+* Delimitadores
+```go
+( ) { } [ ] , ; :
+```
+* Palabras clave del lenguaje
+```go
+FUNCTION, LET, TRUE, FALSE, IF, ELSE, RETURN
+```
+
+10. Máquina Virtual (VM) `(vm.go)`\
+implementación de una VM para la ejecución del bytecode generado por el compilador. Simula la ejecución del programa previamente compilado, que contiene instrucciones.
+*   Caracteristicas
+    * Es una VM basada en pila.
+    * Se apoya en estructuras del compilador (`compiler`), instrucciones (`code`) y objetos del lenguaje (`object`).
+
+**Ejemplo**
+
+* Código fuente
+
+```javascript
+let result = 1 + 2;
+```
+* Bytecode
+```assembly
+OpConstant 0   // Push 1
+OpConstant 1   // Push 2
+OpAdd          // Add top two values (1 + 2)
+OpPop          // Pop result (3)
+```
+* Ejecución de la VM
+* Paso 1
+
+```go
+stack = [1]
+sp = 1
+```
+
+* Paso 2
+
+```go
+stack = [1, 2]
+sp = 2
+```
+
+* Paso 3
+
+```go
+stack = [3]
+sp = 1
+```
+
+* Paso 4
+
+```go
+stack = []
+sp = 0
+EvaluatedValues = [3]
+```
+
+* Resultado
+
+```go
+3
+```
+
+11. Principal `(main.go)`\
+
+Se encarga de compilar y ejecutar el código escrito por el usuario. Este programa:
+
+* Lee y analiza el código fuente.
+* Lo convierte a bytecode.
+* Lo ejecuta en una VM.
+* Imprime el resultado.

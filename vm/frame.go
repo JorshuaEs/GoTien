@@ -1,5 +1,3 @@
-// The code defines a Frame struct and related methods for managing the execution frame in a virtual
-// machine.
 package vm
 
 import (

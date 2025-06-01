@@ -1,5 +1,3 @@
-// The `Compiler` struct in the Go code provided is responsible for compiling AST nodes into bytecode
-// instructions for a custom programming language.
 package compiler
 
 import (

@@ -1,5 +1,3 @@
-// The above code defines a package in Go that contains various built-in functions like `len`, `puts`,
-// `first`, `last`, `rest`, and `push`.
 package object
 
 import "fmt"

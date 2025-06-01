@@ -1,5 +1,3 @@
-// The code defines functions to create and manipulate environments in Go for a programming language
-// interpreter.
 package object
 
 func NewEnclosedEnvironment(outer *Environment) *Environment {
